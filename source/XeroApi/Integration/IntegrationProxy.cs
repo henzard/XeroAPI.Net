@@ -5,6 +5,8 @@ using System.Net;
 using DevDefined.OAuth.Consumer;
 using XeroApi.Exceptions;
 using XeroApi.Model;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace XeroApi.Integration
 {
@@ -12,6 +14,7 @@ namespace XeroApi.Integration
     {
         private readonly IOAuthSession _oauthSession;
 
+        List<DateTime> rateLimiter = new List<DateTime>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationProxy"/> class.
@@ -37,7 +40,8 @@ namespace XeroApi.Integration
                 /*apiQueryDescription.Order,*/
                 apiQueryDescription.UpdatedSinceDate,
                 apiQueryDescription.QueryStringParams,
-                null);
+                null,
+                rateLimiter);
 
             if (consumerResponse.ResponseCode == HttpStatusCode.NotFound)
             {
@@ -68,7 +72,8 @@ namespace XeroApi.Integration
                 /*null, */
                 null,
                 null,
-                acceptMimeType);
+                acceptMimeType,
+                rateLimiter);
 
             if (consumerResponse.IsGoodResponse || consumerResponse.IsClientError)
             {
@@ -91,8 +96,9 @@ namespace XeroApi.Integration
                 /*null,*/
                 null,
                 null,
-                new NameValueCollection { { "summarizeErrors", "false" } }, 
-                null);
+                new NameValueCollection { { "summarizeErrors", "false" } },
+                null,
+                rateLimiter);
 
             if (consumerResponse.IsGoodResponse || consumerResponse.IsClientError)
             {
@@ -116,7 +122,8 @@ namespace XeroApi.Integration
                 null,
                 null,
                 new NameValueCollection { { "summarizeErrors", "false" } }, 
-                null);
+                null,
+                rateLimiter);
 
             if (consumerResponse.IsGoodResponse || consumerResponse.IsClientError)
             {
@@ -214,8 +221,18 @@ namespace XeroApi.Integration
         #endregion
 
 
-        private static IConsumerResponse CallApi(IOAuthSession oauthSession, string method, string body, Uri baseUrl, string endpointName, string itemId, /*string whereClause, string orderBy,*/ DateTime? lastModifiedDate, NameValueCollection additionalQueryParams, string acceptMimeType)
+        private static IConsumerResponse CallApi(IOAuthSession oauthSession, string method, string body, Uri baseUrl, string endpointName, string itemId, /*string whereClause, string orderBy,*/ DateTime? lastModifiedDate, NameValueCollection additionalQueryParams, string acceptMimeType, List<DateTime> rateLimiter)
         {
+            while (rateLimiter.Count >= 60)
+            {
+                while (rateLimiter[0].AddMinutes(1) > DateTime.UtcNow)
+                {
+                    Thread.Sleep(1000);
+                }
+                rateLimiter.RemoveAt(0);
+            }
+            rateLimiter.Add(DateTime.UtcNow);
+
             method = string.IsNullOrEmpty(method) ? "GET" : method.ToUpper();
 
             Uri uri = ConstructUri(baseUrl, endpointName, itemId, /*whereClause, orderBy,*/ additionalQueryParams);
