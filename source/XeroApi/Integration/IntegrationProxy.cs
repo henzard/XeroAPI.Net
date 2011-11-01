@@ -14,7 +14,7 @@ namespace XeroApi.Integration
     {
         private readonly IOAuthSession _oauthSession;
 
-        List<DateTime> rateLimiter = new List<DateTime>();
+        RateLimiter rateLimiter = new RateLimiter(TimeSpan.FromMinutes(1), 60);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegrationProxy"/> class.
@@ -221,17 +221,9 @@ namespace XeroApi.Integration
         #endregion
 
 
-        private static IConsumerResponse CallApi(IOAuthSession oauthSession, string method, string body, Uri baseUrl, string endpointName, string itemId, /*string whereClause, string orderBy,*/ DateTime? lastModifiedDate, NameValueCollection additionalQueryParams, string acceptMimeType, List<DateTime> rateLimiter)
+        private static IConsumerResponse CallApi(IOAuthSession oauthSession, string method, string body, Uri baseUrl, string endpointName, string itemId, /*string whereClause, string orderBy,*/ DateTime? lastModifiedDate, NameValueCollection additionalQueryParams, string acceptMimeType, RateLimiter rateLimiter)
         {
-            while (rateLimiter.Count >= 60)
-            {
-                while (rateLimiter[0].AddMinutes(1) > DateTime.UtcNow)
-                {
-                    Thread.Sleep(1000);
-                }
-                rateLimiter.RemoveAt(0);
-            }
-            rateLimiter.Add(DateTime.UtcNow);
+            rateLimiter.WaitUntilLimit();
 
             method = string.IsNullOrEmpty(method) ? "GET" : method.ToUpper();
 
