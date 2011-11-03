@@ -12,7 +12,7 @@ namespace XeroApi
 {
     public class Repository
     {
-        private readonly ApiQueryProvider _provider;
+        private readonly QueryProvider _provider;
         private readonly IIntegrationProxy _proxy;
 
 
