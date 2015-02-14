@@ -19,6 +19,10 @@ namespace XeroApi.Model
 
         public JournalLines JournalLines { get; set; }
 
+        public Guid SourceID { get; set; }
+
+        public string SourceType { get; set; }
+
         public override string ToString()
         {
             return string.Format("Journal:{0}", JournalNumber);
