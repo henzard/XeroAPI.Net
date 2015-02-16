@@ -19,6 +19,12 @@ namespace XeroApi.OAuth
         {
         }
 
+        public override AccessToken RenewAccessToken()
+        {
+            //Intentionally does nothing as Public sessions can't be renewed
+            var currentAccessToken = TokenRepository.GetAccessToken();
+            return currentAccessToken;
+        }
 
         private static IOAuthConsumerContext CreateConsumerContext(string userAgent, string consumerKey, string consumerSecret)
         {

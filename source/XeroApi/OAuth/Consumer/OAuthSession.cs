@@ -268,7 +268,7 @@ namespace DevDefined.OAuth.Consumer
         return token;
     }
 
-    public AccessToken RenewAccessToken()
+    public virtual AccessToken RenewAccessToken()
     {
         var currentAccessToken = TokenRepository.GetAccessToken();
 
