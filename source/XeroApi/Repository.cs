@@ -127,6 +127,8 @@ namespace XeroApi
         public IQueryable<ManualJournal> ManualJournals { get { return new ApiQuery<ManualJournal>(_provider); } }
 
         public IQueryable<BankTransaction> BankTransactions { get { return new ApiQuery<BankTransaction>(_provider); } }
+
+        public IQueryable<BankTransfer> BankTransfers { get { return new ApiQuery<BankTransfer>(_provider); } }
         
         public IQueryable<Item> Items { get { return new ApiQuery<Item>(_provider); } }
 

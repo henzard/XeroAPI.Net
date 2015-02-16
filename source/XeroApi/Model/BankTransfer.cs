@@ -30,4 +30,8 @@ namespace XeroApi.Model
         [ReadOnly]
         public Guid? ToBankTransactionID { get; set; }
     }
+
+    public class BankTransfers : ModelList<BankTransfer>
+    {
+    }
 }
