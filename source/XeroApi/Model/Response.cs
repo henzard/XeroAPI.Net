@@ -14,6 +14,7 @@ namespace XeroApi.Model
 
         public Accounts Accounts { get; set; }
         public BankTransactions BankTransactions { get; set; }
+        public BankTransfers BankTransfers { get; set; }
         public BrandingThemes BrandingThemes { get; set; }
         public Contacts Contacts { get; set; }
         public CreditNotes CreditNotes { get; set; }
@@ -46,7 +47,7 @@ namespace XeroApi.Model
                 }
             }
 
-            throw new ArgumentException("There are not properties that are of type " + elementListType.Name);
+            throw new ArgumentException("There are not properties that are of type " + elementListType.Name, "elementListType");
         }
 
         public IModelList<TModel> GetTypedProperty<TModel>()

@@ -10,7 +10,11 @@ namespace XeroApi.Model
 
         public static Type GetElementCollectionType(Type elementType)
         {
-            return Type.GetType(elementType.Namespace + "." + Pluralize(elementType.Name));
+            var retVal = Type.GetType(elementType.Namespace + "." + Pluralize(elementType.Name));
+            if (retVal == null)
+                throw new ArgumentException("No plural found for type " + elementType.Name, "elementType");
+
+            return retVal;
         }
 
         public static string Pluralize(string elementName)
