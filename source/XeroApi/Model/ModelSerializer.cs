@@ -116,6 +116,7 @@ namespace XeroApi.Model
 
             xElement.Descendants().Where(el => el.Name == "ValidationErrors" || el.Name == "Warnings").Remove();
             xElement.Descendants().Where(el => el.Attributes().Any(attribute => attribute.Name.LocalName == "nil")).Remove();
+            xElement.Descendants().Where(el => el.IsEmpty).Remove();
 
             return xElement.ToString();
         }
