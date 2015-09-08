@@ -40,6 +40,8 @@ namespace XeroApi.Model
         public Phones Phones { get; set; }
         
         public ContactGroups ContactGroups { get; set; }
+
+        public string AccountNumber { get; set; }
         
         [ReadOnly]
         public bool IsSupplier { get; set; }
