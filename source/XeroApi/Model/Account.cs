@@ -27,6 +27,8 @@ namespace XeroApi.Model
 
         public string BankAccountNumber { get; set; }
 
+        public string BankAccountType { get; set; }
+
         public string CurrencyCode { get; set; }
 
         public string ReportingCode { get; set; }
