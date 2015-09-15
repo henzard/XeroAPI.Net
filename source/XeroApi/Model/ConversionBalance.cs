@@ -2,7 +2,7 @@
 {
     public class ConversionBalance
     {
-        public string Code { get; set; }
+        public string AccountCode { get; set; }
         public decimal Balance { get; set; }
     }
 }
