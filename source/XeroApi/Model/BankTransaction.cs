@@ -47,6 +47,8 @@ namespace XeroApi.Model
         public virtual string CurrencyCode { get; set; }
 
         public DateTime? FullyPaidOnDate { get; set; }
+
+        public Guid? PrepaymentID { get; set; }
     }
 
 
