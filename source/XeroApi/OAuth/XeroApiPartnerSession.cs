@@ -25,6 +25,9 @@ namespace XeroApi.OAuth
 
         private static IOAuthConsumerContext CreateConsumerContext(string userAgent, string consumerKey, X509Certificate2 signingCertificate)
         {
+            if (signingCertificate == null)
+                throw new ArgumentNullException(nameof(signingCertificate));
+
             return new OAuthConsumerContext
             {
                 // Public apps use HMAC-SHA1
